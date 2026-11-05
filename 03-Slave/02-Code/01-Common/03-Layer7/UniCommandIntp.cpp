@@ -68,7 +68,7 @@ EN_Bool CUniCommandIntp::Execute()
 
         break;
     case 11:
-        Command012::ToResponse();
+        Command011::ToResponse();
         break;
     case 12:
         Command012::ToResponse();
@@ -245,7 +245,8 @@ void CUniCommandIntp::Command006::ToResponse()
     TY_Byte* data = CService::ActiveService->Response.PayloadData;
 
     data[0] = CHartData::CStat.PollAddress;
-    data[1] = 11;
+    // Loop current mode: 1 = enabled (same value as in command 7)
+    data[1] = 1;
     CService::ActiveService->Response.PayloadSize = 2;
     CService::SendHartIpMessage();
 }

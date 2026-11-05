@@ -56,6 +56,8 @@ namespace BaTestHart
         private static FrmTestClient? mo_parent;
         private static byte m_dev_hart_rev = 5;
         private static ushort m_cfg_ch_count = 0;
+        // Command of the service which was launched last (for error reports)
+        private static byte m_last_cmd = 0;
         #endregion Private Data
 
         #region Internal Data
@@ -70,6 +72,20 @@ namespace BaTestHart
         internal static ushort hServiceConnect = HartDeviceDLL.INVALID_SRV_Handle;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
         internal static byte[] BytesOfUniqueId = new byte[5];
+
+        // Raised on the GUI thread whenever a command service has completed
+        // (successfully or not). Used by the universal commands window.
+        internal static event Action<CUniCmdResult>? UniCmdCompleted;
+
+        // true as long as a connect or command service is waiting for completion
+        internal static bool IsServicePending
+        {
+            get
+            {
+                return (hServiceDoCmd != HartDeviceDLL.INVALID_SRV_Handle) ||
+                       (hServiceConnect != HartDeviceDLL.INVALID_SRV_Handle);
+            }
+        }
         #endregion Internal Data
 
         #region Initialization
@@ -249,8 +265,48 @@ namespace BaTestHart
                 }
             }
 
+            RaiseDoCmdResult(iError);
             mo_parent?.HandleMonitorData();
             mo_parent?.UpdateServiceDisplay(iError);
+        }
+
+        // Report the result of a command service to the registered listeners
+        private static void RaiseDoCmdResult(int error_)
+        {
+            CUniCmdResult result = new CUniCmdResult();
+
+            result.UsedRetries = Confirmation.UsedRetries;
+            if (error_ == CMALib.CConsts.CTClientECodes.NO_ERROR)
+            {
+                int len = Confirmation.DataLen;
+
+                result.Success = true;
+                result.Cmd = Confirmation.Cmd;
+                result.RespCode1 = Confirmation.RespCode1;
+                result.RespCode2 = Confirmation.RespCode2;
+                result.DurationMs = Confirmation.SrvDuration;
+                result.Data = new byte[len];
+                Array.Copy(Confirmation.BytesOfData, result.Data, len);
+                if ((result.RespCode1 == 0) || (result.RespCode1 == 8))
+                {
+                    // Data is only valid if the device did not report an error
+                    result.Decoded = CUniCmdCodec.Decode(result.Cmd, result.Data, len);
+                }
+            }
+            else
+            {
+                result.Cmd = m_last_cmd;
+                result.ErrorText = error_ switch
+                {
+                    CMALib.CConsts.CTClientECodes.COMM_ERROR => "Communication failure",
+                    CMALib.CConsts.CTClientECodes.EMPTY_SERVICE => "Empty service used",
+                    CMALib.CConsts.CTClientECodes.INVALID_HANDLE => "Invalid service handle",
+                    CMALib.CConsts.CTClientECodes.NO_DEVICE_RESPONSE => "No device response",
+                    _ => "Unknown error",
+                };
+            }
+
+            UniCmdCompleted?.Invoke(result);
         }
 
         internal static void HandleConnectService()
@@ -274,6 +330,23 @@ namespace BaTestHart
                 IsConnected = false;
             }
 
+            CUniCmdResult result = new CUniCmdResult();
+
+            result.Cmd = 0;
+            result.UsedRetries = ConnectionInfo.UsedRetries;
+            if (iError == CMALib.CConsts.CTClientECodes.NO_ERROR)
+            {
+                result.Success = true;
+                result.RespCode1 = ConnectionInfo.RespCode1;
+                result.RespCode2 = ConnectionInfo.RespCode2;
+                result.Decoded = CUniCmdCodec.DecodeConnection(ConnectionInfo);
+            }
+            else
+            {
+                result.ErrorText = "Connection failed (no device response)";
+            }
+
+            UniCmdCompleted?.Invoke(result);
             mo_parent?.HandleMonitorData();
             mo_parent?.UpdateServiceDisplay(iError);
         }
@@ -283,11 +356,28 @@ namespace BaTestHart
         // Generic
         internal static ushort DoCommand(byte command_, byte qos_, ref byte data_ref_, byte data_len_)
         {
+            m_last_cmd = command_;
             return HartDeviceDLL.BAHAMA_DoCommand(command_, qos_, ref data_ref_, data_len_, ref BytesOfUniqueId[0]);
+        }
+
+        // Send a command with the global address (unique ID with all bytes zero).
+        // This is the addressing used by commands 11 and 21, where the device
+        // is selected by its tag and not by its address.
+        private static void DoGlobalAddressedCommand(byte command_, byte data_len_)
+        {
+            byte[] global_id = new byte[5];
+
+            m_last_cmd = command_;
+            hServiceDoCmd = HartDeviceDLL.BAHAMA_DoCommand(command_,
+                                                           HartDeviceDLL.NO_WAIT_For_Service,
+                                                           ref BytesOfData[0],
+                                                           data_len_,
+                                                           ref global_id[0]);
         }
 
         internal static void ReqCmd0short()
         {
+            m_last_cmd = 0;
             if (IsRequestAllowed())
             {
                 hServiceConnect = HartDeviceDLL.BAHAMA_ConnectByAddr(CSettings.PollAddress, HartDeviceDLL.NO_WAIT_For_Service, CSettings.NumRetries);
@@ -332,6 +422,7 @@ namespace BaTestHart
 
             if (CTestClient.IsRequestAllowed())
             {
+                m_last_cmd = 31;
                 CTestClient.hServiceDoCmd = HartDeviceDLL.BAHAMA_DoExtCmd(CSettings.ExtCmd,
                                                                 HartDeviceDLL.NO_WAIT_For_Service,
                                                                 ref CTestClient.BytesOfData[0],
@@ -487,6 +578,113 @@ namespace BaTestHart
             if (IsRequestAllowed())
             {
                 hServiceDoCmd = CTestClient.DoCommand(48, HartDeviceDLL.NO_WAIT_For_Service, ref BytesOfData[0], 0);
+            }
+        }
+
+        // ---- Further universal commands (used by the universal commands window) ----
+
+        internal static void ReqCmd7()
+        {
+            if (IsRequestAllowed())
+            {
+                hServiceDoCmd = DoCommand(7, HartDeviceDLL.NO_WAIT_For_Service, ref BytesOfData[0], 0);
+            }
+        }
+
+        internal static void ReqCmd8()
+        {
+            if (IsRequestAllowed())
+            {
+                hServiceDoCmd = DoCommand(8, HartDeviceDLL.NO_WAIT_For_Service, ref BytesOfData[0], 0);
+            }
+        }
+
+        // Read device variables with status. The request carries the codes
+        // of the device variables (1..8 slots).
+        internal static void ReqCmd9(byte[] device_variable_codes_)
+        {
+            if (IsRequestAllowed())
+            {
+                int count = Math.Min(device_variable_codes_.Length, 8);
+
+                Array.Copy(device_variable_codes_, BytesOfData, count);
+                hServiceDoCmd = DoCommand(9, HartDeviceDLL.NO_WAIT_For_Service, ref BytesOfData[0], (byte)count);
+            }
+        }
+
+        // Read unique identifier associated with short tag (global address)
+        internal static void ReqCmd11(string short_tag_)
+        {
+            if (IsRequestAllowed())
+            {
+                byte[] packed = CUniCmdCodec.EncodePackedAscii(short_tag_, 8);
+
+                Array.Copy(packed, BytesOfData, packed.Length);
+                DoGlobalAddressedCommand(11, (byte)packed.Length);
+            }
+        }
+
+        internal static void ReqCmd16()
+        {
+            if (IsRequestAllowed())
+            {
+                hServiceDoCmd = DoCommand(16, HartDeviceDLL.NO_WAIT_For_Service, ref BytesOfData[0], 0);
+            }
+        }
+
+        // Write message (32 packed ASCII characters)
+        internal static void ReqCmd17(string message_)
+        {
+            if (IsRequestAllowed())
+            {
+                byte[] packed = CUniCmdCodec.EncodePackedAscii(message_, 32);
+
+                Array.Copy(packed, BytesOfData, packed.Length);
+                hServiceDoCmd = DoCommand(17, HartDeviceDLL.NO_WAIT_For_Service, ref BytesOfData[0], (byte)packed.Length);
+            }
+        }
+
+        // Write final assembly number (24 bit)
+        internal static void ReqCmd19(uint number_)
+        {
+            if (IsRequestAllowed())
+            {
+                BytesOfData[0] = (byte)((number_ >> 16) & 0xff);
+                BytesOfData[1] = (byte)((number_ >> 8) & 0xff);
+                BytesOfData[2] = (byte)(number_ & 0xff);
+                hServiceDoCmd = DoCommand(19, HartDeviceDLL.NO_WAIT_For_Service, ref BytesOfData[0], 3);
+            }
+        }
+
+        internal static void ReqCmd20()
+        {
+            if (IsRequestAllowed())
+            {
+                hServiceDoCmd = DoCommand(20, HartDeviceDLL.NO_WAIT_For_Service, ref BytesOfData[0], 0);
+            }
+        }
+
+        // Read unique identifier associated with long tag (global address)
+        internal static void ReqCmd21(string long_tag_)
+        {
+            if (IsRequestAllowed())
+            {
+                byte[] tag = CUniCmdCodec.EncodeLatin1(long_tag_, 32);
+
+                Array.Copy(tag, BytesOfData, tag.Length);
+                DoGlobalAddressedCommand(21, (byte)tag.Length);
+            }
+        }
+
+        // Write long tag (32 characters, ISO Latin-1)
+        internal static void ReqCmd22(string long_tag_)
+        {
+            if (IsRequestAllowed())
+            {
+                byte[] tag = CUniCmdCodec.EncodeLatin1(long_tag_, 32);
+
+                Array.Copy(tag, BytesOfData, tag.Length);
+                hServiceDoCmd = DoCommand(22, HartDeviceDLL.NO_WAIT_For_Service, ref BytesOfData[0], (byte)tag.Length);
             }
         }
         internal static void ReqUserCmd()

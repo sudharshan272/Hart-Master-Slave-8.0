@@ -398,13 +398,14 @@ CHSipL2SM::EN_Event CHSipL2SM::GetSoftEvent(EN_StatusInWAIT status_, EN_Event ev
                         if (CHSipProtocol::WorkFrame.PayloadCount == 6)
                         {
                             TY_Byte* data = CHSipProtocol::WorkFrame.PayloadData;
-                            // Does short tag match?
+                            // Does short tag match? All bytes have to be equal.
+                            is_match = EN_Bool::TRUE8;
                             for (TY_Byte e = 0; e < 6; e++)
                             {
-                                is_match = EN_Bool::TRUE8;
                                 if (data[e] != CHartData::CStat.ShortTag[e])
                                 {
                                     is_match = EN_Bool::FALSE8;
+                                    break;
                                 }
                             }
                         }
@@ -414,13 +415,14 @@ CHSipL2SM::EN_Event CHSipL2SM::GetSoftEvent(EN_StatusInWAIT status_, EN_Event ev
                         if (CHSipProtocol::WorkFrame.PayloadCount == 32)
                         {
                             TY_Byte* data = CHSipProtocol::WorkFrame.PayloadData;
-                            // Does long tag match?
+                            // Does long tag match? All bytes have to be equal.
+                            is_match = EN_Bool::TRUE8;
                             for (TY_Byte e = 0; e < 32; e++)
                             {
-                                is_match = EN_Bool::TRUE8;
                                 if (data[e] != CHartData::CStat.LongTag[e])
                                 {
                                     is_match = EN_Bool::FALSE8;
+                                    break;
                                 }
                             }
                         }

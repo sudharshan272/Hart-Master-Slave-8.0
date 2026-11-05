@@ -88,6 +88,7 @@ namespace BaTestHart
             TxtHartIpHostName = new TextBox();
             label11 = new Label();
             tabCommands = new TabPage();
+            ButUniversalCmds = new Button();
             label2 = new Label();
             groupBox2 = new GroupBox();
             ButSendUserCmd = new Button();
@@ -778,6 +779,7 @@ namespace BaTestHart
             // 
             // tabCommands
             // 
+            tabCommands.Controls.Add(ButUniversalCmds);
             tabCommands.Controls.Add(label2);
             tabCommands.Controls.Add(groupBox2);
             tabCommands.Controls.Add(groupBox1);
@@ -788,7 +790,20 @@ namespace BaTestHart
             tabCommands.TabIndex = 2;
             tabCommands.Text = "Commands";
             tabCommands.UseVisualStyleBackColor = true;
-            // 
+            //
+            // ButUniversalCmds
+            //
+            ButUniversalCmds.BackColor = Color.PowderBlue;
+            ButUniversalCmds.FlatStyle = FlatStyle.Popup;
+            ButUniversalCmds.Location = new Point(684, 12);
+            ButUniversalCmds.Name = "ButUniversalCmds";
+            ButUniversalCmds.Size = new Size(86, 72);
+            ButUniversalCmds.TabIndex = 8;
+            ButUniversalCmds.Text = "All Universal Commands";
+            ToolTipInfo.SetToolTip(ButUniversalCmds, "Open a window to test all Hart universal commands (0..22, 38, 48).");
+            ButUniversalCmds.UseVisualStyleBackColor = false;
+            ButUniversalCmds.Click += ButUniversalCmds_Click;
+            //
             // label2
             // 
             label2.AutoSize = true;
@@ -1893,6 +1908,7 @@ namespace BaTestHart
         private Button ButSendCmd35;
         private Button ButEditUserCmd;
         private Button ButSendUserCmd;
+        private Button ButUniversalCmds;
         private Panel panTop;
         private Button butMnuRecord;
         private Button butMnuClearDisplay;

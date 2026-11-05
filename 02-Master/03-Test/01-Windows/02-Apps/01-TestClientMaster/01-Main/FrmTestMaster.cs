@@ -779,6 +779,10 @@ namespace BaTestHart
         {
             SendUserCmd();
         }
+        private void ButUniversalCmds_Click(object sender, EventArgs e)
+        {
+            OpenUniversalCmds();
+        }
         #endregion TabCommands Controls
 
         #region TabOptions Controls
@@ -1587,6 +1591,40 @@ namespace BaTestHart
             {
                 ActivateMonitor();
                 CTestClient.ReqUserCmd();
+            }
+        }
+
+        // Used by the universal commands window: Start the frame monitor and
+        // run the request. Returns the result of the request function (true:
+        // a service was started).
+        internal bool RunServiceRequest(Func<bool> request_)
+        {
+            if (!IsServiceAllowed())
+            {
+                return false;
+            }
+
+            ActivateMonitor();
+            return request_();
+        }
+
+        private FrmUniversalCmds? mo_frm_universal_cmds;
+
+        private void OpenUniversalCmds()
+        {
+            if ((mo_frm_universal_cmds == null) || mo_frm_universal_cmds.IsDisposed)
+            {
+                mo_frm_universal_cmds = new FrmUniversalCmds(this);
+                mo_frm_universal_cmds.Show(this);
+            }
+            else
+            {
+                if (mo_frm_universal_cmds.WindowState == FormWindowState.Minimized)
+                {
+                    mo_frm_universal_cmds.WindowState = FormWindowState.Normal;
+                }
+
+                mo_frm_universal_cmds.Activate();
             }
         }
         #endregion Tab Commands Functions
