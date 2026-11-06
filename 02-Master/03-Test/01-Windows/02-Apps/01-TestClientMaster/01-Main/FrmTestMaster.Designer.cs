@@ -89,6 +89,18 @@ namespace BaTestHart
             label11 = new Label();
             tabCommands = new TabPage();
             ButUniversalCmds = new Button();
+            ButSendCmd6 = new Button();
+            ButSendCmd7 = new Button();
+            ButSendCmd8 = new Button();
+            ButSendCmd9 = new Button();
+            ButSendCmd11 = new Button();
+            ButSendCmd16 = new Button();
+            ButSendCmd17 = new Button();
+            ButSendCmd19 = new Button();
+            ButSendCmd20 = new Button();
+            ButSendCmd21 = new Button();
+            ButSendCmd22 = new Button();
+            ButEditUniParams = new Button();
             label2 = new Label();
             groupBox2 = new GroupBox();
             ButSendUserCmd = new Button();
@@ -795,11 +807,11 @@ namespace BaTestHart
             //
             ButUniversalCmds.BackColor = Color.PowderBlue;
             ButUniversalCmds.FlatStyle = FlatStyle.Popup;
-            ButUniversalCmds.Location = new Point(684, 12);
+            ButUniversalCmds.Location = new Point(620, 72);
             ButUniversalCmds.Name = "ButUniversalCmds";
-            ButUniversalCmds.Size = new Size(86, 72);
+            ButUniversalCmds.Size = new Size(165, 26);
             ButUniversalCmds.TabIndex = 8;
-            ButUniversalCmds.Text = "All Universal Commands";
+            ButUniversalCmds.Text = "Universal Commands window";
             ToolTipInfo.SetToolTip(ButUniversalCmds, "Open a window to test all Hart universal commands (0..22, 38, 48).");
             ButUniversalCmds.UseVisualStyleBackColor = false;
             ButUniversalCmds.Click += ButUniversalCmds_Click;
@@ -809,7 +821,7 @@ namespace BaTestHart
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
             label2.ForeColor = SystemColors.ControlDarkDark;
-            label2.Location = new Point(491, 94);
+            label2.Location = new Point(775, 94);
             label2.Name = "label2";
             label2.Size = new Size(219, 37);
             label2.TabIndex = 49;
@@ -822,7 +834,7 @@ namespace BaTestHart
             groupBox2.Controls.Add(ButEditCmd31);
             groupBox2.Controls.Add(ButSendCmd31);
             groupBox2.Controls.Add(ButEditUserCmd);
-            groupBox2.Location = new Point(485, 5);
+            groupBox2.Location = new Point(791, 5);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(192, 91);
             groupBox2.TabIndex = 7;
@@ -888,7 +900,7 @@ namespace BaTestHart
             // 
             groupBox1.Controls.Add(ButSendCmd35);
             groupBox1.Controls.Add(ButEditCmd35);
-            groupBox1.Location = new Point(314, 5);
+            groupBox1.Location = new Point(620, 5);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(165, 62);
             groupBox1.TabIndex = 6;
@@ -924,6 +936,18 @@ namespace BaTestHart
             // 
             // groupBox9
             // 
+            groupBox9.Controls.Add(ButSendCmd6);
+            groupBox9.Controls.Add(ButSendCmd7);
+            groupBox9.Controls.Add(ButSendCmd8);
+            groupBox9.Controls.Add(ButSendCmd9);
+            groupBox9.Controls.Add(ButSendCmd11);
+            groupBox9.Controls.Add(ButSendCmd16);
+            groupBox9.Controls.Add(ButSendCmd17);
+            groupBox9.Controls.Add(ButSendCmd19);
+            groupBox9.Controls.Add(ButSendCmd20);
+            groupBox9.Controls.Add(ButSendCmd21);
+            groupBox9.Controls.Add(ButSendCmd22);
+            groupBox9.Controls.Add(ButEditUniParams);
             groupBox9.Controls.Add(ButSendCmd38);
             groupBox9.Controls.Add(ButSendCmd48);
             groupBox9.Controls.Add(ButEditCmd18);
@@ -938,10 +962,177 @@ namespace BaTestHart
             groupBox9.Controls.Add(ButSendCmd0short);
             groupBox9.Location = new Point(8, 5);
             groupBox9.Name = "groupBox9";
-            groupBox9.Size = new Size(300, 126);
+            groupBox9.Size = new Size(607, 126);
             groupBox9.TabIndex = 5;
             groupBox9.TabStop = false;
             groupBox9.Text = "Universal";
+            // 
+            // ButSendCmd6
+            // 
+            ButSendCmd6.BackColor = Color.PowderBlue;
+            ButSendCmd6.FlatStyle = FlatStyle.Popup;
+            ButSendCmd6.Location = new Point(300, 25);
+            ButSendCmd6.Name = "ButSendCmd6";
+            ButSendCmd6.Size = new Size(62, 26);
+            ButSendCmd6.TabIndex = 70;
+            ButSendCmd6.Text = "Cmd 6";
+            ButSendCmd6.TextAlign = ContentAlignment.MiddleLeft;
+            ToolTipInfo.SetToolTip(ButSendCmd6, "Write Polling Address (address from Edit Cmd 6..22)");
+            ButSendCmd6.UseVisualStyleBackColor = false;
+            ButSendCmd6.Click += ButSendCmd6_Click;
+            // 
+            // ButSendCmd7
+            // 
+            ButSendCmd7.BackColor = Color.PowderBlue;
+            ButSendCmd7.FlatStyle = FlatStyle.Popup;
+            ButSendCmd7.Location = new Point(300, 57);
+            ButSendCmd7.Name = "ButSendCmd7";
+            ButSendCmd7.Size = new Size(62, 26);
+            ButSendCmd7.TabIndex = 71;
+            ButSendCmd7.Text = "Cmd 7";
+            ButSendCmd7.TextAlign = ContentAlignment.MiddleLeft;
+            ToolTipInfo.SetToolTip(ButSendCmd7, "Read Loop Configuration");
+            ButSendCmd7.UseVisualStyleBackColor = false;
+            ButSendCmd7.Click += ButSendCmd7_Click;
+            // 
+            // ButSendCmd8
+            // 
+            ButSendCmd8.BackColor = Color.PowderBlue;
+            ButSendCmd8.FlatStyle = FlatStyle.Popup;
+            ButSendCmd8.Location = new Point(300, 89);
+            ButSendCmd8.Name = "ButSendCmd8";
+            ButSendCmd8.Size = new Size(62, 26);
+            ButSendCmd8.TabIndex = 72;
+            ButSendCmd8.Text = "Cmd 8";
+            ButSendCmd8.TextAlign = ContentAlignment.MiddleLeft;
+            ToolTipInfo.SetToolTip(ButSendCmd8, "Read Dynamic Variable Classifications");
+            ButSendCmd8.UseVisualStyleBackColor = false;
+            ButSendCmd8.Click += ButSendCmd8_Click;
+            // 
+            // ButSendCmd9
+            // 
+            ButSendCmd9.BackColor = Color.PowderBlue;
+            ButSendCmd9.FlatStyle = FlatStyle.Popup;
+            ButSendCmd9.Location = new Point(368, 25);
+            ButSendCmd9.Name = "ButSendCmd9";
+            ButSendCmd9.Size = new Size(62, 26);
+            ButSendCmd9.TabIndex = 73;
+            ButSendCmd9.Text = "Cmd 9";
+            ButSendCmd9.TextAlign = ContentAlignment.MiddleLeft;
+            ToolTipInfo.SetToolTip(ButSendCmd9, "Read Device Variables with Status");
+            ButSendCmd9.UseVisualStyleBackColor = false;
+            ButSendCmd9.Click += ButSendCmd9_Click;
+            // 
+            // ButSendCmd11
+            // 
+            ButSendCmd11.BackColor = Color.PowderBlue;
+            ButSendCmd11.FlatStyle = FlatStyle.Popup;
+            ButSendCmd11.Location = new Point(368, 57);
+            ButSendCmd11.Name = "ButSendCmd11";
+            ButSendCmd11.Size = new Size(62, 26);
+            ButSendCmd11.TabIndex = 74;
+            ButSendCmd11.Text = "Cmd 11";
+            ButSendCmd11.TextAlign = ContentAlignment.MiddleLeft;
+            ToolTipInfo.SetToolTip(ButSendCmd11, "Read Unique Identifier Associated With Tag (global address)");
+            ButSendCmd11.UseVisualStyleBackColor = false;
+            ButSendCmd11.Click += ButSendCmd11_Click;
+            // 
+            // ButSendCmd16
+            // 
+            ButSendCmd16.BackColor = Color.PowderBlue;
+            ButSendCmd16.FlatStyle = FlatStyle.Popup;
+            ButSendCmd16.Location = new Point(368, 89);
+            ButSendCmd16.Name = "ButSendCmd16";
+            ButSendCmd16.Size = new Size(62, 26);
+            ButSendCmd16.TabIndex = 75;
+            ButSendCmd16.Text = "Cmd 16";
+            ButSendCmd16.TextAlign = ContentAlignment.MiddleLeft;
+            ToolTipInfo.SetToolTip(ButSendCmd16, "Read Final Assembly Number");
+            ButSendCmd16.UseVisualStyleBackColor = false;
+            ButSendCmd16.Click += ButSendCmd16_Click;
+            // 
+            // ButSendCmd17
+            // 
+            ButSendCmd17.BackColor = Color.PowderBlue;
+            ButSendCmd17.FlatStyle = FlatStyle.Popup;
+            ButSendCmd17.Location = new Point(436, 25);
+            ButSendCmd17.Name = "ButSendCmd17";
+            ButSendCmd17.Size = new Size(62, 26);
+            ButSendCmd17.TabIndex = 76;
+            ButSendCmd17.Text = "Cmd 17";
+            ButSendCmd17.TextAlign = ContentAlignment.MiddleLeft;
+            ToolTipInfo.SetToolTip(ButSendCmd17, "Write Message");
+            ButSendCmd17.UseVisualStyleBackColor = false;
+            ButSendCmd17.Click += ButSendCmd17_Click;
+            // 
+            // ButSendCmd19
+            // 
+            ButSendCmd19.BackColor = Color.PowderBlue;
+            ButSendCmd19.FlatStyle = FlatStyle.Popup;
+            ButSendCmd19.Location = new Point(436, 57);
+            ButSendCmd19.Name = "ButSendCmd19";
+            ButSendCmd19.Size = new Size(62, 26);
+            ButSendCmd19.TabIndex = 77;
+            ButSendCmd19.Text = "Cmd 19";
+            ButSendCmd19.TextAlign = ContentAlignment.MiddleLeft;
+            ToolTipInfo.SetToolTip(ButSendCmd19, "Write Final Assembly Number");
+            ButSendCmd19.UseVisualStyleBackColor = false;
+            ButSendCmd19.Click += ButSendCmd19_Click;
+            // 
+            // ButSendCmd20
+            // 
+            ButSendCmd20.BackColor = Color.PowderBlue;
+            ButSendCmd20.FlatStyle = FlatStyle.Popup;
+            ButSendCmd20.Location = new Point(436, 89);
+            ButSendCmd20.Name = "ButSendCmd20";
+            ButSendCmd20.Size = new Size(62, 26);
+            ButSendCmd20.TabIndex = 78;
+            ButSendCmd20.Text = "Cmd 20";
+            ButSendCmd20.TextAlign = ContentAlignment.MiddleLeft;
+            ToolTipInfo.SetToolTip(ButSendCmd20, "Read Long Tag");
+            ButSendCmd20.UseVisualStyleBackColor = false;
+            ButSendCmd20.Click += ButSendCmd20_Click;
+            // 
+            // ButSendCmd21
+            // 
+            ButSendCmd21.BackColor = Color.PowderBlue;
+            ButSendCmd21.FlatStyle = FlatStyle.Popup;
+            ButSendCmd21.Location = new Point(504, 25);
+            ButSendCmd21.Name = "ButSendCmd21";
+            ButSendCmd21.Size = new Size(62, 26);
+            ButSendCmd21.TabIndex = 79;
+            ButSendCmd21.Text = "Cmd 21";
+            ButSendCmd21.TextAlign = ContentAlignment.MiddleLeft;
+            ToolTipInfo.SetToolTip(ButSendCmd21, "Read Unique Identifier Associated With Long Tag (global address)");
+            ButSendCmd21.UseVisualStyleBackColor = false;
+            ButSendCmd21.Click += ButSendCmd21_Click;
+            // 
+            // ButSendCmd22
+            // 
+            ButSendCmd22.BackColor = Color.PowderBlue;
+            ButSendCmd22.FlatStyle = FlatStyle.Popup;
+            ButSendCmd22.Location = new Point(504, 57);
+            ButSendCmd22.Name = "ButSendCmd22";
+            ButSendCmd22.Size = new Size(62, 26);
+            ButSendCmd22.TabIndex = 80;
+            ButSendCmd22.Text = "Cmd 22";
+            ButSendCmd22.TextAlign = ContentAlignment.MiddleLeft;
+            ToolTipInfo.SetToolTip(ButSendCmd22, "Write Long Tag");
+            ButSendCmd22.UseVisualStyleBackColor = false;
+            ButSendCmd22.Click += ButSendCmd22_Click;
+            // 
+            // ButEditUniParams
+            // 
+            ButEditUniParams.FlatStyle = FlatStyle.Popup;
+            ButEditUniParams.Location = new Point(504, 89);
+            ButEditUniParams.Name = "ButEditUniParams";
+            ButEditUniParams.Size = new Size(95, 26);
+            ButEditUniParams.TabIndex = 81;
+            ButEditUniParams.Text = "Edit Cmd 6..22";
+            ButEditUniParams.TextAlign = ContentAlignment.MiddleLeft;
+            ToolTipInfo.SetToolTip(ButEditUniParams, "Edit the request data of Cmd 6, 9, 11, 17, 19, 21 and 22");
+            ButEditUniParams.UseVisualStyleBackColor = true;
+            ButEditUniParams.Click += ButEditUniParams_Click;
             // 
             // ButSendCmd38
             // 
@@ -1822,7 +2013,7 @@ namespace BaTestHart
             // FrmTestClient
             // 
             AutoScaleBaseSize = new Size(6, 16);
-            ClientSize = new Size(784, 481);
+            ClientSize = new Size(1030, 481);
             Controls.Add(rtxtDisplay);
             Controls.Add(StatusInfo);
             Controls.Add(panTop);
@@ -1902,6 +2093,18 @@ namespace BaTestHart
         private Button ButSendCmd15;
         private Button ButSendCmd18;
         private Button ButEditCmd18;
+        private Button ButSendCmd6;
+        private Button ButSendCmd7;
+        private Button ButSendCmd8;
+        private Button ButSendCmd9;
+        private Button ButSendCmd11;
+        private Button ButSendCmd16;
+        private Button ButSendCmd17;
+        private Button ButSendCmd19;
+        private Button ButSendCmd20;
+        private Button ButSendCmd21;
+        private Button ButSendCmd22;
+        private Button ButEditUniParams;
         private Button ButEditCmd31;
         private Button ButSendCmd31;
         private Button ButEditCmd35;

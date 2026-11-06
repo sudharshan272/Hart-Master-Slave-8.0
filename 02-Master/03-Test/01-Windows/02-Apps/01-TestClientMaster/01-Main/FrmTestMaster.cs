@@ -170,6 +170,18 @@ namespace BaTestHart
             mo_list_of_buttons.Add(ButSendCmd35);
             mo_list_of_buttons.Add(ButSendCmd38);
             mo_list_of_buttons.Add(ButSendCmd48);
+            mo_list_of_buttons.Add(ButSendCmd6);
+            mo_list_of_buttons.Add(ButSendCmd7);
+            mo_list_of_buttons.Add(ButSendCmd8);
+            mo_list_of_buttons.Add(ButSendCmd9);
+            mo_list_of_buttons.Add(ButSendCmd11);
+            mo_list_of_buttons.Add(ButSendCmd16);
+            mo_list_of_buttons.Add(ButSendCmd17);
+            mo_list_of_buttons.Add(ButSendCmd19);
+            mo_list_of_buttons.Add(ButSendCmd20);
+            mo_list_of_buttons.Add(ButSendCmd21);
+            mo_list_of_buttons.Add(ButSendCmd22);
+            mo_list_of_buttons.Add(ButEditUniParams);
             mo_list_of_buttons.Add(ButSendUserCmd);
             // Master combo boxes
             mo_list_of_comboboxes.Clear();
@@ -193,6 +205,15 @@ namespace BaTestHart
             mo_list_of_hot_buttons.Add(ButSendCmd35);
             mo_list_of_hot_buttons.Add(ButSendCmd38);
             mo_list_of_hot_buttons.Add(ButSendCmd48);
+            mo_list_of_hot_buttons.Add(ButSendCmd6);
+            mo_list_of_hot_buttons.Add(ButSendCmd7);
+            mo_list_of_hot_buttons.Add(ButSendCmd8);
+            mo_list_of_hot_buttons.Add(ButSendCmd9);
+            mo_list_of_hot_buttons.Add(ButSendCmd16);
+            mo_list_of_hot_buttons.Add(ButSendCmd17);
+            mo_list_of_hot_buttons.Add(ButSendCmd19);
+            mo_list_of_hot_buttons.Add(ButSendCmd20);
+            mo_list_of_hot_buttons.Add(ButSendCmd22);
             mo_list_of_hot_buttons.Add(ButSendUserCmd);
             // Master hot check boxes
             mo_list_of_hot_checkboxes.Clear();
@@ -339,7 +360,7 @@ namespace BaTestHart
             CSettings.Fetch();
             // Adjust main form size and position
             Height = CSettings.MainFormHeight;
-            Width = CSettings.MainFormWidth;
+            Width = Math.Max(CSettings.MainFormWidth, 1030);
             SetMainWindowStartPosition(CSettings.MainFormLeft, CSettings.MainFormTop);
             // Be sure that user colors are not overwritten by standard sets
             CSettings.SaveUserColors();
@@ -778,6 +799,54 @@ namespace BaTestHart
         private void ButSendUserCmd_Click(object sender, EventArgs e)
         {
             SendUserCmd();
+        }
+        private void ButSendCmd6_Click(object sender, EventArgs e)
+        {
+            SendCmd6();
+        }
+        private void ButSendCmd7_Click(object sender, EventArgs e)
+        {
+            SendCmd7();
+        }
+        private void ButSendCmd8_Click(object sender, EventArgs e)
+        {
+            SendCmd8();
+        }
+        private void ButSendCmd9_Click(object sender, EventArgs e)
+        {
+            SendCmd9();
+        }
+        private void ButSendCmd11_Click(object sender, EventArgs e)
+        {
+            SendCmd11();
+        }
+        private void ButSendCmd16_Click(object sender, EventArgs e)
+        {
+            SendCmd16();
+        }
+        private void ButSendCmd17_Click(object sender, EventArgs e)
+        {
+            SendCmd17();
+        }
+        private void ButSendCmd19_Click(object sender, EventArgs e)
+        {
+            SendCmd19();
+        }
+        private void ButSendCmd20_Click(object sender, EventArgs e)
+        {
+            SendCmd20();
+        }
+        private void ButSendCmd21_Click(object sender, EventArgs e)
+        {
+            SendCmd21();
+        }
+        private void ButSendCmd22_Click(object sender, EventArgs e)
+        {
+            SendCmd22();
+        }
+        private void ButEditUniParams_Click(object sender, EventArgs e)
+        {
+            Edit_UniParams();
         }
         private void ButUniversalCmds_Click(object sender, EventArgs e)
         {
@@ -1576,6 +1645,107 @@ namespace BaTestHart
             }
         }
 
+        // ---- Further universal commands (request data: CUniParams) ----
+
+        internal void SendCmd6()
+        {
+            if (IsServiceAllowed() && CUniParams.TryGetCmd6(out byte addr))
+            {
+                ActivateMonitor();
+                CTestClient.ReqCmd6(addr);
+            }
+        }
+
+        internal void SendCmd7()
+        {
+            if (IsServiceAllowed())
+            {
+                ActivateMonitor();
+                CTestClient.ReqCmd7();
+            }
+        }
+
+        internal void SendCmd8()
+        {
+            if (IsServiceAllowed())
+            {
+                ActivateMonitor();
+                CTestClient.ReqCmd8();
+            }
+        }
+
+        internal void SendCmd9()
+        {
+            if (IsServiceAllowed() && CUniParams.TryGetCmd9(out byte[] codes))
+            {
+                ActivateMonitor();
+                CTestClient.ReqCmd9(codes);
+            }
+        }
+
+        internal void SendCmd11()
+        {
+            if (IsServiceAllowed() && CUniParams.TryGetCmd11(out string tag))
+            {
+                ActivateMonitor();
+                CTestClient.ReqCmd11(tag);
+            }
+        }
+
+        internal void SendCmd16()
+        {
+            if (IsServiceAllowed())
+            {
+                ActivateMonitor();
+                CTestClient.ReqCmd16();
+            }
+        }
+
+        internal void SendCmd17()
+        {
+            if (IsServiceAllowed())
+            {
+                ActivateMonitor();
+                CTestClient.ReqCmd17(CUniParams.Message);
+            }
+        }
+
+        internal void SendCmd19()
+        {
+            if (IsServiceAllowed() && CUniParams.TryGetCmd19(out uint number))
+            {
+                ActivateMonitor();
+                CTestClient.ReqCmd19(number);
+            }
+        }
+
+        internal void SendCmd20()
+        {
+            if (IsServiceAllowed())
+            {
+                ActivateMonitor();
+                CTestClient.ReqCmd20();
+            }
+        }
+
+        internal void SendCmd21()
+        {
+            if (IsServiceAllowed() && CUniParams.TryGetCmd21(out string tag))
+            {
+                ActivateMonitor();
+                CTestClient.ReqCmd21(tag);
+            }
+        }
+
+        internal void SendCmd22()
+        {
+            if (IsServiceAllowed())
+            {
+                ActivateMonitor();
+                CTestClient.ReqCmd22(CUniParams.LongTagToWrite);
+            }
+        }
+
         internal void SendCmd31()
         {
             if (IsServiceAllowed())
@@ -1782,6 +1952,21 @@ namespace BaTestHart
             FrmCmd18 f = new FrmCmd18(this);
 
             f.ShowDialog(this);
+        }
+
+        private FrmUniParams? mo_frm_uni_params;
+
+        private void Edit_UniParams()
+        {
+            if ((mo_frm_uni_params == null) || mo_frm_uni_params.IsDisposed)
+            {
+                mo_frm_uni_params = new FrmUniParams(this);
+                mo_frm_uni_params.Show(this);
+            }
+            else
+            {
+                mo_frm_uni_params.Activate();
+            }
         }
 
         private void Edit_Cmd31()
